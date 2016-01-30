@@ -27,6 +27,7 @@ gem 'active_model_serializers', '~> 0.9.4'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+  gem 'rspec-rails', '~> 3.4'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 end
@@ -37,5 +38,10 @@ group :development do
   gem 'sqlite3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+end
+
+group :test do
+  gem 'factory_girl_rails', '~> 4.5'
+  gem 'ffaker', '~> 2.1'
 end
 
