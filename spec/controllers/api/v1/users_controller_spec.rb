@@ -67,6 +67,7 @@ RSpec.describe Api::V1::UsersController do
     context "when successfully updated" do
       before(:each) do
         @user = FactoryGirl.create(:user)
+        request.headers["Authorization"] = @user.auth_token
         patch :update, { id: @user.id,
                         user: { email: "newaddress@example.com" } }
       end
@@ -84,6 +85,7 @@ RSpec.describe Api::V1::UsersController do
     context "when update is unsuccessful" do
       before(:each) do
         @user = FactoryGirl.create(:user)
+        request.headers["Authorization"] = @user.auth_token
         patch :update, { id: @user.id,
                          user: { email: "bademail.com" } }
       end
@@ -97,17 +99,47 @@ RSpec.describe Api::V1::UsersController do
         expect(response.status).to eq(422)
       end
     end
+
+    context "when user is not logged in" do
+      before(:each) do
+        @user = FactoryGirl.create(:user)
+        request.headers["Authorization"] = nil
+        patch :update, { id: @user.id,
+                         user: { email: "newaddress@email.com" } }
+      end
+
+      it "responds with HTTP status 401" do
+        expect(response.status).to eq(401)
+      end
+    end
   end
 
   describe "DELETE #destroy" do
-    before(:each) do
-      @user = FactoryGirl.create(:user)
-      delete :destroy, { id: @user.id }
+
+    context "when logged in" do
+      before(:each) do
+        @user = FactoryGirl.create(:user)
+        request.headers["Authorization"] = @user.auth_token
+        delete :destroy, { id: @user.id }
+      end
+
+      it "responds with HTTP status 204" do
+        # 204 :no_content
+        expect(response.status).to eq(204)
+      end
     end
 
-    it "responds with HTTP status 204" do
-      # 204 :no_content
-      expect(response.status).to eq(204)
+    context "when user is not logged in" do
+      before(:each) do
+        @user = FactoryGirl.create(:user)
+        request.headers["Authorization"] = nil
+        delete :destroy, { id: @user.id }
+      end
+
+      it "responds with HTTP status 401" do
+        expect(response.status).to eq(401)
+      end
+
     end
   end
 end
