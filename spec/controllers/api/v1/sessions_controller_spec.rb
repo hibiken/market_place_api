@@ -44,4 +44,17 @@ RSpec.describe Api::V1::SessionsController do
       end
     end
   end
+
+  describe "DELETE #destroy" do
+    before(:each) do
+      @request.env["devise.mapping"] = Devise.mappings[:user] 
+      @user = FactoryGirl.create(:user)
+      sign_in @user
+      delete :destroy, id: @user.auth_token
+    end
+
+    it "responds with HTTP status 204" do
+      expect(response.status).to eq(204)
+    end
+  end
 end
