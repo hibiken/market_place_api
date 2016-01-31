@@ -61,4 +61,52 @@ RSpec.describe Api::V1::UsersController do
       end
     end
   end
+
+  describe "PUT/PATCH #update" do
+    context "when successfully updated" do
+      before(:each) do
+        @user = FactoryGirl.create(:user)
+        patch :update, { id: @user.id,
+                        user: { email: "newaddress@example.com" } }, format: :json
+      end
+
+      it "renders the json representation of the updated user" do
+        user_response = JSON.parse(response.body, symbolize_names: true)
+        expect(user_response[:email]).to eq("newaddress@example.com")
+      end
+
+      it "responsds with HTTP status 200" do
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context "when update is unsuccessful" do
+      before(:each) do
+        @user = FactoryGirl.create(:user)
+        patch :update, { id: @user.id,
+                         user: { email: "bademail.com" } }, format: :json
+      end
+
+      it "renders n error json" do
+        user_response = JSON.parse(response.body, symbolize_names: true)
+        expect(user_response[:errors][:email]).to include("is invalid")
+      end
+
+      it "responds with HTTP status 422" do
+        expect(response.status).to eq(422)
+      end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+      delete :destroy, { id: @user.id }, format: :json
+    end
+
+    it "responds with HTTP status 204" do
+      # 204 :no_content
+      expect(response.status).to eq(204)
+    end
+  end
 end
