@@ -12,7 +12,7 @@ RSpec.describe Api::V1::UsersController do
     end
 
     it "returns the information about a reporter on a hash" do
-      user_response = JSON.parse(response.body, symbolize_names: true)
+      user_response = json_response
       expect(user_response[:email]).to eq(@user.email)
     end
 
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::UsersController do
       end
 
       it "renders the json representation for the user record just created" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:email]).to eq(@user_attributes[:email])
       end
 
@@ -47,12 +47,12 @@ RSpec.describe Api::V1::UsersController do
       end
 
       it "renders an error json" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response).to have_key(:errors)
       end
 
       it "renders an error json with explanation" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:errors][:email]).to include("can't be blank")
       end
 
@@ -71,7 +71,7 @@ RSpec.describe Api::V1::UsersController do
       end
 
       it "renders the json representation of the updated user" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:email]).to eq("newaddress@example.com")
       end
 
@@ -88,7 +88,7 @@ RSpec.describe Api::V1::UsersController do
       end
 
       it "renders n error json" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:errors][:email]).to include("is invalid")
       end
 
