@@ -10,4 +10,11 @@ RSpec.describe User do
   it { should respond_to(:password_confirmation) }
 
   it { should be_valid }
+
+  describe "validations" do
+    it "requires email to be present" do
+      @user.email = ""
+      expect(@user).not_to be_valid
+    end
+  end
 end
