@@ -7,7 +7,7 @@ module Authenticable
 
   def authenticate_with_token!
     unless current_user.present?
-      render json: { errors: "Not authenticated" }, status: 401
+      render json: { errors: "Not authenticated, response.headers['Authorization'] = #{request.headers['Authorization']}" }, status: 401
     end
   end
 

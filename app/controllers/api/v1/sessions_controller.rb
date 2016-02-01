@@ -9,7 +9,7 @@ module Api
 
         if user.valid_password? user_password
           sign_in user, store: false
-          user.generate_authentication_token!
+          user.set_auth_token
           user.save
           render json: user, status: 200, location: [:api, user]
         else
@@ -19,8 +19,7 @@ module Api
 
       def destroy
         user = User.find_by(auth_token: params[:id])
-        user.generate_authentication_token!
-        user.save
+        user.delete_auth_token
         head 204
       end
 

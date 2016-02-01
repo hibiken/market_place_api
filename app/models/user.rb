@@ -6,11 +6,21 @@ class User < ActiveRecord::Base
 
   validates :auth_token, uniqueness: true
 
-  before_create :generate_authentication_token!
+  before_create :set_auth_token
 
-  def generate_authentication_token!
-    begin
-      self.auth_token = Devise.friendly_token
-    end while self.class.exists?(auth_token: auth_token)
+  def set_auth_token
+    self.auth_token = generate_auth_token
+  end
+
+  def generate_auth_token
+    loop do
+      token = Devise.friendly_token
+      break token unless self.class.exists?(auth_token: token)
+    end
+  end
+
+  def delete_auth_token
+    self.auth_token = nil
+    save
   end
 end

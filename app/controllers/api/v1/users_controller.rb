@@ -5,7 +5,8 @@ module Api
       respond_to :json
 
       def show
-        respond_with User.find(params[:id])
+        user = User.find(params[:id])
+        render json: user, status: 200
       end
 
       def create
