@@ -11,6 +11,13 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       products_response = json_response
       expect(products_response[:products].size).to eq(4)
     end
+
+    it "returns JSON with user object embbeded" do
+      products_response = json_response[:products]
+      products_response.each do |product|
+        expect(product[:user]).to be_present
+      end
+    end
   end
 
 
@@ -27,6 +34,11 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
 
     it "redponds with HTTP status 200" do
       expect(response.status).to eq(200)
+    end
+
+    it "has user data embedded in the JSON respose" do
+      product_response = json_response[:product]
+      expect(product_response[:user][:email]).to eq(@product.user.email)
     end
   end
 
