@@ -9,6 +9,7 @@ RSpec.describe Api::V1::UsersController do
   describe "GET #show" do
     before(:each) do
       @user = FactoryGirl.create(:user)
+      @product = FactoryGirl.create(:product, user: @user)
       get :show, id: @user.id
     end
 
@@ -19,6 +20,11 @@ RSpec.describe Api::V1::UsersController do
 
     it "responds with HTTP status 200" do
       expect(response.status).to eq(200)
+    end
+
+    it "has the product ids embeded in the json output" do
+      user_response = json_response[:user]
+      expect(user_response[:product_ids]).to eq([@product.id])
     end
   end
 
