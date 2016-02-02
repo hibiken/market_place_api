@@ -21,7 +21,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
     end
 
     it "returns product data in JSON format" do
-      product_response = json_response
+      product_response = json_response[:product]
       expect(product_response[:title]).to eq(@product.title)
     end
 
@@ -41,7 +41,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
 
       it "returns product data in JSON format" do
-        product_response = json_response
+        product_response = json_response[:product]
         expect(product_response[:title]).to eq(@product_attributes[:title])
       end
 
@@ -98,7 +98,7 @@ RSpec.describe Api::V1::ProductsController, type: :controller do
       end
 
       it "renders the json representation of the updated product" do
-        product_response = json_response
+        product_response = json_response[:product]
         expect(product_response[:title]).to eq("Updated title")
       end
 
